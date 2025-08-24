@@ -1,4 +1,4 @@
-import express from "express";
+import express, { RequestHandler } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import router from "./app/route";
