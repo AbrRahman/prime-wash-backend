@@ -6,4 +6,5 @@ export type TUser = {
   phone?: string;
   address?: string;
   role: "user" | "admin";
+  isDelete: boolean;
 };

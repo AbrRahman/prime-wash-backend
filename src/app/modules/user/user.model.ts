@@ -1,5 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import { TUser } from "./users.interface";
+import { TUser } from "./user.interface";
 import bcrypt from "bcrypt";
 
 const userSchema = new Schema<TUser>(
@@ -36,6 +36,10 @@ const userSchema = new Schema<TUser>(
       type: String,
       enum: ["user", "admin"],
       default: "user",
+    },
+    isDelete: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

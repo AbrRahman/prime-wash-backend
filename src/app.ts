@@ -14,7 +14,7 @@ app.get("/", (req, res, next) => {
 });
 
 // routing
-app.use(router);
+app.use("/api/v1", router);
 
 // not found handler
 app.use((req, res, next) => {

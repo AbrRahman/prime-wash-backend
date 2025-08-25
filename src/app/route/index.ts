@@ -1,13 +1,14 @@
 import express from "express";
+import userRouter from "../modules/user/user.routes";
 const router = express.Router();
 
-// const moduleRouter = [
-//   {
-//     path: "/",
-//     route: "",
-//   },
-// ];
+const moduleRouter = [
+  {
+    path: "/user",
+    route: userRouter,
+  },
+];
 
-// moduleRouter.forEach(({path,route})=>router.use(path,route))
+moduleRouter.forEach(({ path, route }) => router.use(path, route));
 
 export default router;
