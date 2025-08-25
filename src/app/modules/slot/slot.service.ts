@@ -21,8 +21,22 @@ const createSlotIntoDB = async (payload: Partial<TSlot>) => {
   return result;
 };
 
+// get all slot
+const getAllSlotFromDB = async (query: Record<string, unknown>) => {
+  let filterQuery: any = {};
+  if (query.serviceId) {
+    filterQuery.service = query.serviceId;
+  }
+  if (query.date) {
+    filterQuery.date = query.date;
+  }
+  const result = await SlotModel.find(filterQuery);
+  return result;
+};
+
 const slotService = {
   createSlotIntoDB,
+  getAllSlotFromDB,
 };
 
 export default slotService;
