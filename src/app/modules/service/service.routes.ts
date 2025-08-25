@@ -12,6 +12,18 @@ router.post(
   validationRequest(serviceValidation.createServiceValidationSchema),
   serviceController.createService
 );
+// get all service
+router.get("/", serviceController.getAllService);
+// get single service
+router.get("/:id", serviceController.getSingleService);
+// update service
+router.put(
+  "/:id",
+  validationRequest(serviceValidation.updateServiceValidationSchema),
+  serviceController.updateService
+);
+// delete service
+router.delete("/:id", serviceController.deleteService);
 
 const serviceRouter = router;
 export default serviceRouter;

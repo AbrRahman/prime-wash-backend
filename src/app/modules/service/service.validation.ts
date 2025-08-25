@@ -9,7 +9,17 @@ const createServiceValidationSchema = z.object({
   }),
 });
 
+const updateServiceValidationSchema = z.object({
+  body: z.object({
+    name: z.string().trim().optional(),
+    description: z.string().trim().optional(),
+    price: z.string().trim().optional(),
+    duration: z.string().trim().optional(),
+  }),
+});
+
 const serviceValidation = {
   createServiceValidationSchema,
+  updateServiceValidationSchema,
 };
 export default serviceValidation;
