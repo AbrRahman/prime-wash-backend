@@ -2,6 +2,8 @@ import express, { RequestHandler } from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import router from "./app/route";
+import globalErrorHandler from "./app/middleware/globalErrorHandler";
+import notFoundHandler from "./app/middleware/notFoundHandler";
 
 const app = express();
 
@@ -17,13 +19,9 @@ app.get("/", (req, res, next) => {
 app.use("/api/v1", router);
 
 // not found handler
-app.use((req, res, next) => {
-  res.send("Page notFound");
-});
+app.use(notFoundHandler);
 
 // default error handler
-// app.use((err,req,res,next)=>{
-//    res.send("Error handler")
-// })
+app.use(globalErrorHandler);
 
 export default app;

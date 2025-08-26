@@ -1,0 +1,24 @@
+import mongoose from "mongoose";
+import {
+  TErrorSource,
+  TGenericErrorResponse,
+} from "../interface/interface.error";
+
+const formateCastError = (
+  err: mongoose.Error.CastError
+): TGenericErrorResponse => {
+  const statusCode = 400;
+  const errorSource: TErrorSource = [
+    {
+      path: err?.path,
+      message: err?.message,
+    },
+  ];
+  return {
+    statusCode,
+    message: "Invalid id",
+    errorSource,
+  };
+};
+
+export default formateCastError;
