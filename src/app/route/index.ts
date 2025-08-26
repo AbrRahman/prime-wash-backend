@@ -2,6 +2,7 @@ import express from "express";
 import userRouter from "../modules/user/user.routes";
 import serviceRouter from "../modules/service/service.routes";
 import slotRouter from "../modules/slot/slot.routes";
+import bookingRouter from "../modules/booking/booking.routes";
 const router = express.Router();
 
 const moduleRouter = [
@@ -16,6 +17,10 @@ const moduleRouter = [
   {
     path: "/slot",
     route: slotRouter,
+  },
+  {
+    path: "/booking",
+    route: bookingRouter,
   },
 ];
 
