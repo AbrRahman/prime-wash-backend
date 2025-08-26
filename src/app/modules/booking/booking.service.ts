@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 import SlotModel from "../slot/slot.model";
 import TBooking from "./booking.interface";
 import BookingModel from "./booking.model";
+import filterUpcomingBooking from "../../utils/filterUpcomingBooking";
 
+// booking service database
 const insertBookingIntoDB = async (payload: Partial<TBooking>) => {
   const session = await mongoose.startSession();
 
@@ -36,7 +38,34 @@ const insertBookingIntoDB = async (payload: Partial<TBooking>) => {
   }
 };
 
+// get all booking by admin
+const getAllBookingFromDB = async () => {
+  const result = await BookingModel.find({})
+    .populate("customer")
+    .populate("service")
+    .populate("slot");
+  return result;
+};
+
+// get user booking service
+const getUserAllBookingFromDB = async (userId: string) => {
+  const result = await BookingModel.find({ customer: userId })
+    .populate("service")
+    .populate("slot");
+  return result;
+};
+const getUserAllUpcomingBookingFromDB = async (userId: string) => {
+  const booking = await BookingModel.find({ customer: userId }).populate(
+    "slot"
+  );
+  const result = await filterUpcomingBooking(booking);
+  return result;
+};
+
 const bookingService = {
   insertBookingIntoDB,
+  getAllBookingFromDB,
+  getUserAllBookingFromDB,
+  getUserAllUpcomingBookingFromDB,
 };
 export default bookingService;
