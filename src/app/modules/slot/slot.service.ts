@@ -30,7 +30,7 @@ const getAllSlotFromDB = async (query: Record<string, unknown>) => {
   if (query.date) {
     filterQuery.date = query.date;
   }
-  const result = await SlotModel.find(filterQuery);
+  const result = await SlotModel.find(filterQuery).populate("service");
   return result;
 };
 
