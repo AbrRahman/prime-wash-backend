@@ -4,12 +4,17 @@ import serviceRouter from "../modules/service/service.routes";
 import slotRouter from "../modules/slot/slot.routes";
 import bookingRouter from "../modules/booking/booking.routes";
 import reviewRouter from "../modules/review/review.routes";
+import authRouter from "../modules/auth/auth.routes";
 const router = express.Router();
 
 const moduleRouter = [
   {
     path: "/user",
     route: userRouter,
+  },
+  {
+    path: "/auth",
+    route: authRouter,
   },
   {
     path: "/service",
