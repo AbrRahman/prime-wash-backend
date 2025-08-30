@@ -7,8 +7,8 @@ type TBooking = {
   vehicleType: string;
   vehicleBrand: string;
   vehicleModel: string;
-  manufacturingYear: string;
   registrationPlate: string;
+  paymentStatus: "paid" | "unpaid";
 };
 
 export default TBooking;

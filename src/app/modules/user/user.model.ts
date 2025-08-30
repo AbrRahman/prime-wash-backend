@@ -23,6 +23,7 @@ const userSchema = new Schema<TUser>(
     password: {
       type: String,
       trim: true,
+      select: 0,
     },
     phone: {
       type: String,
@@ -49,7 +50,8 @@ const userSchema = new Schema<TUser>(
 userSchema.pre("save", async function (next) {
   try {
     const user = this;
-    if (user.password && this.isModified(user.password)) {
+
+    if (user.password && user.password?.length) {
       user.password = await bcrypt.hash(user.password, 10);
     }
     next();
@@ -57,6 +59,10 @@ userSchema.pre("save", async function (next) {
     next(err as Error);
   }
 });
-
+//after retrieve password set empty
+userSchema.post("save", async function (doc, next) {
+  doc.password = "";
+  next();
+});
 const UserModel = mongoose.model<TUser>("user", userSchema);
 export default UserModel;

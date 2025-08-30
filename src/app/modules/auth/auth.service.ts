@@ -8,10 +8,14 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 
 // handle email password logic
 const loginUser = async (payload: { email: string; password: string }) => {
-  const user = await UserModel.findOne({ email: payload.email });
+  const user = await UserModel.findOne({ email: payload.email }).select(
+    "+password"
+  );
+
   if (!user) {
     throw new AppError(status.UNAUTHORIZED, "Unauthorized user");
   }
+
   if (user.isDelete) {
     throw new AppError(status.UNAUTHORIZED, "Unauthorized user");
   }
@@ -19,6 +23,7 @@ const loginUser = async (payload: { email: string; password: string }) => {
     payload?.password,
     user?.password as string
   );
+  console.log(match);
   if (!match) {
     throw new AppError(status.UNAUTHORIZED, "Unauthorized user");
   }
@@ -87,9 +92,9 @@ const refreshToken = async (refreshToken: string) => {
   return accessToken;
 };
 
-const authController = {
+const authService = {
   loginUser,
   refreshToken,
 };
 
-export default authController;
+export default authService;

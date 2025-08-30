@@ -22,9 +22,21 @@ const getAllSlot = catchAsync(async (req, res, next) => {
   });
 });
 
+// get single slot by slot id
+const getSingleSlot = catchAsync(async (req, res, next) => {
+  const id = req.params?.id as string;
+  const result = await slotService.getSingleSlotFromDB(id);
+  res.status(status.OK).json({
+    success: true,
+    message: "Get all slot successfully",
+    data: result,
+  });
+});
+
 const slotController = {
   createSlot,
   getAllSlot,
+  getSingleSlot,
 };
 
 export default slotController;

@@ -33,13 +33,14 @@ const bookingSchema = new Schema<TBooking>(
       type: String,
       trim: true,
     },
-    manufacturingYear: {
-      type: String,
-      trim: true,
-    },
     registrationPlate: {
       type: String,
       trim: true,
+    },
+    paymentStatus: {
+      type: String,
+      trim: true,
+      default: "unpaid",
     },
   },
   { timestamps: true }

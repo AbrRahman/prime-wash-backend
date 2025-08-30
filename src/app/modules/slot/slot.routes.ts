@@ -15,5 +15,8 @@ router.post(
 // get all slot route
 router.get("/", slotController.getAllSlot);
 
+// get single slot by slotId
+router.get("/:id", slotController.getSingleSlot);
+
 const slotRouter = router;
 export default slotRouter;

@@ -30,13 +30,22 @@ const getAllSlotFromDB = async (query: Record<string, unknown>) => {
   if (query.date) {
     filterQuery.date = query.date;
   }
-  const result = await SlotModel.find(filterQuery).populate("service");
+  const result = await SlotModel.find(filterQuery)
+    .populate("service")
+    .sort({ startTime: 1 });
+  return result;
+};
+
+// get single slot by slotId;
+const getSingleSlotFromDB = async (id: string) => {
+  const result = await SlotModel.findById(id);
   return result;
 };
 
 const slotService = {
   createSlotIntoDB,
   getAllSlotFromDB,
+  getSingleSlotFromDB,
 };
 
 export default slotService;

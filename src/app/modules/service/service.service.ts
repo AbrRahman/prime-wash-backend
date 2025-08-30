@@ -39,7 +39,7 @@ const getAllServiceFromDB = async (query: Record<string, unknown>) => {
 
   // filter by price range;
   let rangeQuery = {};
-  if (query?.maxPrice) {
+  if (query.maxPrice) {
     rangeQuery = { price: { $lte: Number(query?.maxPrice) } };
   }
   const filterByPriceQuery = filterQuery.find(rangeQuery);
