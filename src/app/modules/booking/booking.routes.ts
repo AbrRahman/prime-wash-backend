@@ -13,5 +13,8 @@ router.get("/", bookingController.getAllBooking);
 router.get("/my-booking", bookingController.getUserAllBooking);
 router.get("/my-upcoming-booking", bookingController.getUserUpcomingBooking);
 
+// unpaid booking delete route
+router.delete("/unpaid", bookingController.deleteUnpaidBooking);
+
 const bookingRouter = router;
 export default bookingRouter;

@@ -3,6 +3,8 @@ import SlotModel from "../slot/slot.model";
 import TBooking from "./booking.interface";
 import BookingModel from "./booking.model";
 import filterUpcomingBooking from "../../utils/filterUpcomingBooking";
+import status from "http-status";
+import AppError from "../../errors/appError";
 
 // booking service database
 const insertBookingIntoDB = async (payload: Partial<TBooking>) => {
@@ -27,12 +29,14 @@ const insertBookingIntoDB = async (payload: Partial<TBooking>) => {
     //   save ths booking data db
     const newBooking = new BookingModel(payload);
     const result = (await newBooking.save({ session })).toObject();
-    session.commitTransaction();
+    await session.commitTransaction();
     session.endSession();
+
+    // generate payment url
 
     return result;
   } catch (err) {
-    session.abortTransaction();
+    await session.abortTransaction();
     session.endSession();
     throw new Error(err as any);
   }
@@ -62,10 +66,35 @@ const getUserAllUpcomingBookingFromDB = async (userId: string) => {
   return result;
 };
 
+// delete unpaid booking
+const deleteUnpaidBookingFromDB = async () => {
+  const result = await BookingModel.findOneAndDelete({
+    paymentStatus: "unpaid",
+  });
+  if (!result) {
+    throw new AppError(status.BAD_REQUEST, "No unpaid booking found");
+  }
+  const slot = await SlotModel.findByIdAndUpdate(
+    result?.slot,
+    {
+      isBooked: "available",
+    },
+    {
+      runValidators: true,
+      new: true,
+    }
+  );
+  if (!slot) {
+    throw new AppError(status.BAD_GATEWAY, "No update available slot");
+  }
+  return true;
+};
+
 const bookingService = {
   insertBookingIntoDB,
   getAllBookingFromDB,
   getUserAllBookingFromDB,
   getUserAllUpcomingBookingFromDB,
+  deleteUnpaidBookingFromDB,
 };
 export default bookingService;

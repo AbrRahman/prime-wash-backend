@@ -10,6 +10,7 @@ const createUserValidationSchema = z.object({
       .regex(/^\+?[0-9]{10,15}$/, "Invalid phone number")
       .optional(),
     address: z.string().optional(),
+    image: z.string().optional(),
   }),
 });
 

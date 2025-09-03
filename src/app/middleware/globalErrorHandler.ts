@@ -10,6 +10,7 @@ import formateCastError from "../errors/formateCastrError";
 import AppError from "../errors/appError";
 
 const globalErrorHandler: ErrorRequestHandler = (error, req, res, next) => {
+  console.log("from ball error", error);
   let message = "Something went wrong";
   let statusCode = error?.statusCode || HttpStatus.INTERNAL_SERVER_ERROR;
   let errorSource: TErrorSource = [

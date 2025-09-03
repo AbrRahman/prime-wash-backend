@@ -28,14 +28,14 @@ const main = async () => {
 main();
 
 // handle unhandledRejection
-process.on("unhandledRejection", () => {
-  if (server) {
-    server.close(() => {
-      process.exit(1);
-    });
-  }
-  process.exit(1);
-});
+// process.on("unhandledRejection", () => {
+//   if (server) {
+//     server.close(() => {
+//       process.exit(1);
+//     });
+//   }
+//   process.exit(1);
+// });
 
-// handel uncaught exception
-process.on("uncaughtException", () => [process.exit(1)]);
+// // handel uncaught exception
+// process.on("uncaughtException", () => [process.exit(1)]);

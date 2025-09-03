@@ -6,9 +6,14 @@ import bookingService from "./booking.service";
 // create booking controller
 const insertBooking = catchAsync(async (req, res, next) => {
   const result = await bookingService.insertBookingIntoDB(req?.body);
+  let success = true;
+  let message = "Successfully Booking";
+  if (!result) {
+    (success = false), (message = "Booking failed");
+  }
   res.status(status.OK).json({
-    success: true,
-    message: "Successfully booking",
+    success: success,
+    message: message,
     data: result,
   });
 });
@@ -36,8 +41,17 @@ const getUserUpcomingBooking = catchAsync(async (req, res, next) => {
   const result = await bookingService.getUserAllUpcomingBookingFromDB(userId);
   res.status(status.OK).json({
     success: true,
-    message: "Get my upcoming booking booking successfully",
+    message: "Get my upcoming booking successfully",
     data: result,
+  });
+});
+
+// delete unpaid booking delete
+const deleteUnpaidBooking = catchAsync(async (req, res, next) => {
+  const result = await bookingService.deleteUnpaidBookingFromDB();
+  res.status(status.OK).json({
+    success: true,
+    message: "Delete unpaid booking successfully",
   });
 });
 
@@ -46,5 +60,6 @@ const bookingController = {
   getAllBooking,
   getUserAllBooking,
   getUserUpcomingBooking,
+  deleteUnpaidBooking,
 };
 export default bookingController;

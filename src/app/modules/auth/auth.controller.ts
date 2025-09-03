@@ -21,6 +21,23 @@ const loginUser = catchAsync(async (req, res, next) => {
   });
 });
 
+// handle google login user
+const googleLogin = catchAsync(async (req, res, next) => {
+  const payload = req?.body;
+  const { accessToken, refreshToken } = await authService.googleLogin(payload);
+  res.cookie("refreshToken", refreshToken, {
+    secure: config.node_env === "production",
+    httpOnly: true,
+  });
+  res.status(status.OK).json({
+    success: true,
+    message: "Login successfully",
+    data: {
+      accessToken,
+    },
+  });
+});
+
 // create refresh token to access token
 const refreshTokenToAccessToken = catchAsync(async (req, res, next) => {
   const refreshToken = req?.cookies?.refreshToken;
@@ -37,5 +54,6 @@ const refreshTokenToAccessToken = catchAsync(async (req, res, next) => {
 const authController = {
   loginUser,
   refreshTokenToAccessToken,
+  googleLogin,
 };
 export default authController;

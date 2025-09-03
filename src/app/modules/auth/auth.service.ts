@@ -23,7 +23,7 @@ const loginUser = async (payload: { email: string; password: string }) => {
     payload?.password,
     user?.password as string
   );
-  console.log(match);
+
   if (!match) {
     throw new AppError(status.UNAUTHORIZED, "Unauthorized user");
   }
@@ -32,6 +32,54 @@ const loginUser = async (payload: { email: string; password: string }) => {
     _id: user?._id,
     email: user?.email,
     role: user?.role,
+  };
+  const access_token_secret = config.jwt_access_secret as string;
+  const access_token_expires = config.jwt_access_exp_time as string;
+  const refresh_token_secret = config.jwt_refresh_secret as string;
+  const refresh_token_expires = config.jwt_refresh_exp_time as string;
+  const accessToken = await createToken(
+    jwt_payload,
+    access_token_secret,
+    access_token_expires
+  );
+  const refreshToken = await createToken(
+    jwt_payload,
+    refresh_token_secret,
+    refresh_token_expires
+  );
+
+  return {
+    accessToken,
+    refreshToken,
+  };
+};
+
+// handle google login user
+const googleLogin = async (payload: {
+  name: string;
+  email: string;
+  image: string;
+}) => {
+  const user = await UserModel.findOne({ email: payload.email });
+
+  let newUser;
+
+  if (!user) {
+    newUser = await UserModel.create(payload);
+  }
+
+  if (!newUser) {
+    newUser = user;
+  }
+
+  if (newUser && newUser?.isDelete) {
+    throw new AppError(status.UNAUTHORIZED, "Unauthorized user");
+  }
+
+  const jwt_payload = {
+    _id: newUser?._id,
+    email: newUser?.email,
+    role: newUser?.role,
   };
   const access_token_secret = config.jwt_access_secret as string;
   const access_token_expires = config.jwt_access_exp_time as string;
@@ -95,6 +143,7 @@ const refreshToken = async (refreshToken: string) => {
 const authService = {
   loginUser,
   refreshToken,
+  googleLogin,
 };
 
 export default authService;

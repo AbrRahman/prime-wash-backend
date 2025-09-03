@@ -2,7 +2,6 @@ import status from "http-status";
 import catchAsync from "../../utils/catchAsync";
 import paymentService from "./payment.service";
 import config from "../../config";
-import axios from "axios";
 
 const createPaymentUrl = catchAsync(async (req, res, next) => {
   const { amount, name, email } = req?.body;
@@ -17,16 +16,23 @@ const createPaymentUrl = catchAsync(async (req, res, next) => {
     cus_email: email,
     cus_phone: "01870762472",
 
-    success_url: `${config.base_url}/api/v1/payment/success`,
-    fail_url: `${config.base_url}/api/v1/payment/fail`,
+    success_url: `${config.base_url}api/v1/payment/success`,
+    fail_url: `${config.base_url}api/v1/payment/fail`,
     cancel_url: `${config.base_url}api/v1/payment/cancel`,
     type: "json",
   };
   const result = await paymentService.createPaymentUrl(payload);
 
+  if (!result.payment_url) {
+    res.status(502).json({
+      success: false,
+      message: result.error || "Payment creation failed",
+    });
+  }
+
   res.status(status.OK).json({
     success: true,
-    message: "Payment url create successfully",
+    message: "Payment URL created",
     data: result,
   });
 });
@@ -40,8 +46,14 @@ const paymentSuccessCallback = catchAsync(async (req, res, next) => {
 // handle payment failed
 const paymentFailCallback = catchAsync(async (req, res, next) => {
   await paymentService.paymentFailOrCancel();
-
-  return res.redirect(302, config.client_url as string);
+  if (req.query.from) {
+    res.status(200).json({
+      success: true,
+      message: "Unpaid booking delete successfully",
+    });
+  } else {
+    return res.redirect(302, config.client_url as string);
+  }
 });
 
 // handle payment cancel
