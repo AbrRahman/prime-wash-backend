@@ -51,6 +51,30 @@ const refreshTokenToAccessToken = catchAsync(async (req, res, next) => {
   });
 });
 
+// password change
+// update user profile
+const passwordChange = catchAsync(async (req, res, next) => {
+  const id = req?.user?._id as string;
+  const result = await authService.passwordChange(
+    id,
+    req?.body?.password,
+    req?.body?.oldPassword
+  );
+  let success = true;
+  let message = "Password change successfully";
+
+  if (!result) {
+    success = false;
+    message = "Password change failed";
+  }
+
+  res.status(status.OK).json({
+    success,
+    message,
+    data: result,
+  });
+});
+
 // get user profile
 const getUserProfile = catchAsync(async (req, res, next) => {
   const id = req?.user?._id as string;
@@ -97,6 +121,7 @@ const authController = {
   loginUser,
   refreshTokenToAccessToken,
   googleLogin,
+  passwordChange,
   getUserProfile,
   updateProfile,
 };

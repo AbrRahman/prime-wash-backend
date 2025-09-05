@@ -142,6 +142,29 @@ const refreshToken = async (refreshToken: string) => {
   return accessToken;
 };
 
+// password change
+const passwordChange = async (
+  userId: string,
+  password: string,
+  oldPassword: string
+) => {
+  const user = await UserModel.findById(userId).select("+password");
+  const match = await bcrypt.compare(oldPassword, user?.password as string);
+  console.log(match);
+  if (match) {
+    const result = UserModel.findByIdAndUpdate(
+      userId,
+      { password: password },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+    return result;
+  }
+  return false;
+};
+
 // get user profile
 const getUserProfileFromBB = async (id: string) => {
   const result = await UserModel.findById(id);
@@ -179,6 +202,7 @@ const authService = {
   googleLogin,
   getUserProfileFromBB,
   updateUserProfileIntoDB,
+  passwordChange,
 };
 
 export default authService;

@@ -14,6 +14,13 @@ router.post("/google-login", authController.googleLogin);
 //get refresh token to access token
 router.post("/refresh-token", authController.refreshTokenToAccessToken);
 
+// password change
+router.put(
+  "/password-change",
+  auth("user", "admin"),
+  authController.passwordChange
+);
+
 // get user profile
 router.get("/profile", auth("user", "admin"), authController.getUserProfile);
 

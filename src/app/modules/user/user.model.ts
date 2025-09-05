@@ -61,6 +61,15 @@ userSchema.pre("save", async function (next) {
     next(err as Error);
   }
 });
+// password update time password hashing
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const update = this.getUpdate() as { password?: string };
+  if (update?.password) {
+    update.password = await bcrypt.hash(update.password, 10);
+    this.setUpdate(update);
+  }
+});
+
 //after retrieve password set empty
 userSchema.post("save", async function (doc, next) {
   doc.password = "";
