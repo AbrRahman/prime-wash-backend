@@ -51,9 +51,53 @@ const refreshTokenToAccessToken = catchAsync(async (req, res, next) => {
   });
 });
 
+// get user profile
+const getUserProfile = catchAsync(async (req, res, next) => {
+  const id = req?.user?._id as string;
+  const result = await authService.getUserProfileFromBB(id);
+  let success = true;
+  let message = "Get user profile successfully";
+
+  if (!result) {
+    success = false;
+    message = "Get user profile failed";
+  }
+
+  res.status(status.OK).json({
+    success,
+    message,
+    data: result,
+  });
+});
+
+// update user profile
+const updateProfile = catchAsync(async (req, res, next) => {
+  const id = req?.user?._id as string;
+  const result = await authService.updateUserProfileIntoDB(
+    id,
+    req?.file,
+    req?.body
+  );
+  let success = true;
+  let message = "Update profile successfully";
+
+  if (!result) {
+    success = false;
+    message = "Update profile failed";
+  }
+
+  res.status(status.OK).json({
+    success,
+    message,
+    data: result,
+  });
+});
+
 const authController = {
   loginUser,
   refreshTokenToAccessToken,
   googleLogin,
+  getUserProfile,
+  updateProfile,
 };
 export default authController;

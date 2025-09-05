@@ -9,7 +9,9 @@ const createReviewIntoDB = async (payload: TReview) => {
 
 //
 const getAllReviewDB = async () => {
-  const result = ReviewModel.find({});
+  const result = await ReviewModel.find({})
+    .populate("user")
+    .sort({ createdAt: -1 });
   return result;
 };
 

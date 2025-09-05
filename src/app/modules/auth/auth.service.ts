@@ -5,6 +5,8 @@ import bcrypt from "bcrypt";
 import { createToken } from "./auth.utlis";
 import config from "../../config";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { TUser } from "../user/user.interface";
+import { uploadImageCloudinary } from "../../utils/handleImageUpload";
 
 // handle email password logic
 const loginUser = async (payload: { email: string; password: string }) => {
@@ -140,10 +142,43 @@ const refreshToken = async (refreshToken: string) => {
   return accessToken;
 };
 
+// get user profile
+const getUserProfileFromBB = async (id: string) => {
+  const result = await UserModel.findById(id);
+  return result;
+};
+
+// update user profile
+const updateUserProfileIntoDB = async (
+  id: string,
+  file: any,
+  payload: Partial<TUser>
+) => {
+  let newProfile = payload;
+  if (file?.path && file?.fieldname) {
+    const { path, fieldname } = file;
+    // upload into cloudinary
+    const upload_url = await uploadImageCloudinary(path, fieldname);
+    const secure_url = upload_url?.secure_url as string;
+    newProfile = {
+      image: secure_url,
+      ...payload,
+    };
+  }
+
+  const result = await UserModel.findByIdAndUpdate(id, newProfile, {
+    runValidators: true,
+    new: true,
+  });
+  return result;
+};
+
 const authService = {
   loginUser,
   refreshToken,
   googleLogin,
+  getUserProfileFromBB,
+  updateUserProfileIntoDB,
 };
 
 export default authService;
