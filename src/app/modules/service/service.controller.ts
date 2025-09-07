@@ -4,7 +4,14 @@ import serviceService from "./service.service";
 
 // insert service controller
 const createService = catchAsync(async (req, res, next) => {
-  const result = await serviceService.insertServiceIntoDB(req?.body, req.file);
+  const result = await serviceService.insertServiceIntoDB(req?.body, req?.file);
+  let success = true;
+  let message = "Service create successfully";
+  if (!result) {
+    success = false;
+    message = "Service create failed";
+  }
+
   res.status(status.OK).json({
     success: true,
     message: "Service create successfully",
@@ -36,7 +43,11 @@ const getSingleService = catchAsync(async (req, res, next) => {
 // update service controller
 const updateService = catchAsync(async (req, res, next) => {
   const serviceId = req?.params?.id as string;
-  const result = await serviceService.updateServiceIntoDB(req?.body, serviceId);
+  const result = await serviceService.updateServiceIntoDB(
+    req?.body,
+    serviceId,
+    req?.file
+  );
   res.status(status.OK).json({
     success: true,
     message: "Update service successfully",

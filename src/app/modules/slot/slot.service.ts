@@ -42,10 +42,23 @@ const getSingleSlotFromDB = async (id: string) => {
   return result;
 };
 
+// delete a slot
+const updateSlotIntoDB = async (payload: { isBooked: string }, id: string) => {
+  const result = await SlotModel.findByIdAndUpdate(id, payload);
+  return result;
+};
+// delete a slot
+const deleteSlotIntoDB = async (id: string) => {
+  const result = await SlotModel.findByIdAndDelete(id);
+  return result;
+};
+
 const slotService = {
   createSlotIntoDB,
   getAllSlotFromDB,
   getSingleSlotFromDB,
+  updateSlotIntoDB,
+  deleteSlotIntoDB,
 };
 
 export default slotService;

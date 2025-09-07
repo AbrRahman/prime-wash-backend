@@ -33,10 +33,33 @@ const getSingleSlot = catchAsync(async (req, res, next) => {
   });
 });
 
+// update slot booking status
+const updateSlot = catchAsync(async (req, res, next) => {
+  const id = req?.params?.id as string;
+  const result = await slotService.updateSlotIntoDB(req?.body, id);
+  res.status(status.OK).json({
+    success: true,
+    message: "Delete slot successfully",
+    data: result,
+  });
+});
+// delete a slot
+const deleteSlot = catchAsync(async (req, res, next) => {
+  const id = req?.params?.id as string;
+  const result = await slotService.deleteSlotIntoDB(id);
+  res.status(status.OK).json({
+    success: true,
+    message: "Delete slot successfully",
+    data: result,
+  });
+});
+
 const slotController = {
   createSlot,
   getAllSlot,
   getSingleSlot,
+  updateSlot,
+  deleteSlot,
 };
 
 export default slotController;

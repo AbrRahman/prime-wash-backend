@@ -150,7 +150,6 @@ const passwordChange = async (
 ) => {
   const user = await UserModel.findById(userId).select("+password");
   const match = await bcrypt.compare(oldPassword, user?.password as string);
-  console.log(match);
   if (match) {
     const result = UserModel.findByIdAndUpdate(
       userId,

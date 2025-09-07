@@ -1,4 +1,5 @@
 import { uploadImageCloudinary } from "../../utils/handleImageUpload";
+import SlotModel from "../slot/slot.model";
 import TService from "./service.interface";
 import ServiceModel from "./service.model";
 
@@ -63,9 +64,21 @@ const getSingleServiceFromDB = async (serviceId: string) => {
 // update service into db
 const updateServiceIntoDB = async (
   payload: Partial<TService>,
-  serviceId: string
+  serviceId: string,
+  file: any
 ) => {
-  const result = await ServiceModel.findByIdAndUpdate(serviceId, payload, {
+  let newPayload = payload;
+  if (file?.path && file?.fieldname) {
+    const { path, fieldname } = file;
+    // upload into cloudinary
+    const upload_url = await uploadImageCloudinary(path, fieldname);
+    const secure_url = upload_url?.secure_url as string;
+    newPayload = {
+      image: secure_url,
+      ...payload,
+    };
+  }
+  const result = await ServiceModel.findByIdAndUpdate(serviceId, newPayload, {
     runValidators: true,
     new: true,
   });
@@ -73,14 +86,21 @@ const updateServiceIntoDB = async (
 };
 
 // service soft delete into db
+// const deleteServiceIntoB = async (serviceId: string) => {
+//   const result = await ServiceModel.findByIdAndUpdate(
+//     serviceId,
+//     { isDeleted: true },
+//     {
+//       new: true,
+//     }
+//   );
+//   return result;
+// };
+
 const deleteServiceIntoB = async (serviceId: string) => {
-  const result = await ServiceModel.findByIdAndUpdate(
-    serviceId,
-    { isDeleted: true },
-    {
-      new: true,
-    }
-  );
+  const result = await ServiceModel.findByIdAndDelete(serviceId);
+  const deleteSlot = await SlotModel.deleteMany({ service: result?._id });
+  console.log(deleteSlot, "delete all slot");
   return result;
 };
 

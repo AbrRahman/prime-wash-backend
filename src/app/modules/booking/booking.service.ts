@@ -59,9 +59,9 @@ const getUserAllBookingFromDB = async (userId: string) => {
   return result;
 };
 const getUserAllUpcomingBookingFromDB = async (userId: string) => {
-  const booking = await BookingModel.find({ customer: userId }).populate(
-    "slot"
-  );
+  const booking = await BookingModel.find({ customer: userId })
+    .populate("service")
+    .populate("slot");
   const result = await filterUpcomingBooking(booking);
   return result;
 };

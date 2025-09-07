@@ -28,20 +28,34 @@ const getAllBooking = catchAsync(async (req, res, next) => {
   });
 });
 const getUserAllBooking = catchAsync(async (req, res, next) => {
-  const userId = req.body?.user;
+  const userId = req?.user?._id;
   const result = await bookingService.getUserAllBookingFromDB(userId);
+
+  let success = true;
+  let message = "Get my booking booking successfully";
+  if (!result?.length) {
+    success = false;
+    message = "Get my booking Failed";
+  }
   res.status(status.OK).json({
-    success: true,
-    message: "Get my booking booking successfully",
+    success,
+    message,
     data: result,
   });
 });
 const getUserUpcomingBooking = catchAsync(async (req, res, next) => {
-  const userId = req.body?.user;
+  const userId = req?.user?._id;
   const result = await bookingService.getUserAllUpcomingBookingFromDB(userId);
+  let success = true;
+  let message = "Get my upcoming booking successfully";
+  if (!result) {
+    success = false;
+    message = "Get my upcoming booking Failed";
+  }
+
   res.status(status.OK).json({
-    success: true,
-    message: "Get my upcoming booking successfully",
+    success,
+    message,
     data: result,
   });
 });

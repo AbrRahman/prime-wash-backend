@@ -16,12 +16,15 @@ router.post(
 router.get("/", serviceController.getAllService);
 // get single service
 router.get("/:id", serviceController.getSingleService);
+
 // update service
-router.put(
+router.patch(
   "/:id",
+  upload.single("file"),
   validationRequest(serviceValidation.updateServiceValidationSchema),
   serviceController.updateService
 );
+
 // delete service
 router.delete("/:id", serviceController.deleteService);
 
