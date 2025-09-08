@@ -10,7 +10,7 @@ type TUserRole = "user" | "admin";
 const auth = (...requiredRole: TUserRole[]) => {
   return catchAsync(async (req, res, next) => {
     const accessToken = req?.headers.authorization as string;
-    const token = accessToken.split(" ")[1];
+    const token = accessToken?.split(" ")[1];
     if (!token) {
       throw new AppError(status.UNAUTHORIZED, "Unauthorized user");
     }

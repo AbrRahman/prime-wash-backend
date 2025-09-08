@@ -54,6 +54,7 @@ const getAllBookingFromDB = async () => {
 // get user booking service
 const getUserAllBookingFromDB = async (userId: string) => {
   const result = await BookingModel.find({ customer: userId })
+    .populate("user")
     .populate("service")
     .populate("slot");
   return result;
@@ -90,11 +91,18 @@ const deleteUnpaidBookingFromDB = async () => {
   return true;
 };
 
+// delete a booking by admin
+const deleteBookingIntoDB = async (id: string) => {
+  const result = await BookingModel.findByIdAndDelete(id);
+  return result;
+};
+
 const bookingService = {
   insertBookingIntoDB,
   getAllBookingFromDB,
   getUserAllBookingFromDB,
   getUserAllUpcomingBookingFromDB,
   deleteUnpaidBookingFromDB,
+  deleteBookingIntoDB,
 };
 export default bookingService;

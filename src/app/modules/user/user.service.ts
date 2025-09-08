@@ -30,9 +30,24 @@ const getAllUserFromDb = async () => {
   const result = await UserModel.find({});
   return result;
 };
+const getSingleFromDb = async (id: string) => {
+  const result = await UserModel.findById(id);
+  return result;
+};
+const updateUserIntoDB = async (payload: { role: string }, id: string) => {
+  const result = await UserModel.findByIdAndUpdate(id, payload);
+  return result;
+};
+const deleteUserIntoDB = async (id: string) => {
+  const result = await UserModel.findByIdAndDelete(id);
+  return result;
+};
 
 const userService = {
   createUserIntoDb,
   getAllUserFromDb,
+  getSingleFromDb,
+  updateUserIntoDB,
+  deleteUserIntoDB,
 };
 export default userService;

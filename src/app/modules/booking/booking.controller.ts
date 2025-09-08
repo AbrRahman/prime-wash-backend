@@ -68,6 +68,15 @@ const deleteUnpaidBooking = catchAsync(async (req, res, next) => {
     message: "Delete unpaid booking successfully",
   });
 });
+// delete a booking by admin
+const deleteBooking = catchAsync(async (req, res, next) => {
+  const id = req?.params?.id as string;
+  const result = await bookingService.deleteBookingIntoDB(id);
+  res.status(status.OK).json({
+    success: true,
+    message: "Delete a booking successfully",
+  });
+});
 
 const bookingController = {
   insertBooking,
@@ -75,5 +84,6 @@ const bookingController = {
   getUserAllBooking,
   getUserUpcomingBooking,
   deleteUnpaidBooking,
+  deleteBooking,
 };
 export default bookingController;

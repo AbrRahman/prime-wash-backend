@@ -24,6 +24,8 @@ router.get(
 
 // unpaid booking delete route
 router.delete("/unpaid", bookingController.deleteUnpaidBooking);
+// delete a booking by admin
+router.delete("/:id", bookingController.deleteBooking);
 
 const bookingRouter = router;
 export default bookingRouter;

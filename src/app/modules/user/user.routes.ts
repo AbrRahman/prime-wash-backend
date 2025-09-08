@@ -15,5 +15,12 @@ router.post(
 // retrieve all users
 router.get("/", userController.getAllUser);
 
+// get single user
+router.get("/:id", userController.getSingleUser);
+// update  users
+router.put("/:id", userController.updateUser);
+// delete  users
+router.delete("/:id", userController.deleteUser);
+
 const userRouter = router;
 export default userRouter;
