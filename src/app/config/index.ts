@@ -19,4 +19,6 @@ export default {
   aamarpay_store_id: process.env.AAMARPAY_STORE_ID,
   aamarpay_signature_key: process.env.AAMARPAY_SIGNATURE_KEY,
   base_url: process.env.BASE_URL,
+  super_user_password: process.env.SUPER_USE_PASSWORD,
+  super_user_email: process.env.SUPER_USE_EMAIL,
 };

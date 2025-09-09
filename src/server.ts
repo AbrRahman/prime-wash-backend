@@ -2,6 +2,7 @@ import { Server } from "http";
 import app from "./app";
 import config from "./app/config";
 import mongoose from "mongoose";
+import seedSuperAdmin from "./app/DB";
 let server: Server;
 
 const main = async () => {
@@ -15,7 +16,7 @@ const main = async () => {
       .catch((err) => {
         console.log("db connection field");
       });
-
+    seedSuperAdmin();
     server = app.listen(config.port, () => {
       console.log(`app is listening port ${config.port}...`);
     });
