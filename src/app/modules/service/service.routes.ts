@@ -3,11 +3,13 @@ import { upload } from "../../utils/handleImageUpload";
 import validationRequest from "../../middleware/validationRequest";
 import serviceValidation from "./service.validation";
 import serviceController from "./service.controller";
+import auth from "../../middleware/auth";
 const router = express.Router();
 
 // create service into db
 router.post(
   "/",
+  auth("admin"),
   upload.single("file"),
   validationRequest(serviceValidation.createServiceValidationSchema),
   serviceController.createService
@@ -20,13 +22,14 @@ router.get("/:id", serviceController.getSingleService);
 // update service
 router.patch(
   "/:id",
+  auth("admin"),
   upload.single("file"),
   validationRequest(serviceValidation.updateServiceValidationSchema),
   serviceController.updateService
 );
 
 // delete service
-router.delete("/:id", serviceController.deleteService);
+router.delete("/:id", auth("admin"), serviceController.deleteService);
 
 const serviceRouter = router;
 export default serviceRouter;

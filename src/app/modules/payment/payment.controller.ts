@@ -40,7 +40,8 @@ const createPaymentUrl = catchAsync(async (req, res, next) => {
 // handle payment success
 const paymentSuccessCallback = catchAsync(async (req, res, next) => {
   await paymentService.paymentSuccess();
-  return res.redirect(302, config.client_url as string);
+  const successUrl = `${config.client_url as string}/success`;
+  return res.redirect(302, successUrl);
 });
 
 // handle payment failed
