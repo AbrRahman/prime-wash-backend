@@ -44,6 +44,7 @@ const generateServiceSlot = (
 
     totalStartMinute += duration;
   }
+
   return slot;
 };
 

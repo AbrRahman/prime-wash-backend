@@ -100,7 +100,6 @@ const updateServiceIntoDB = async (
 const deleteServiceIntoB = async (serviceId: string) => {
   const result = await ServiceModel.findByIdAndDelete(serviceId);
   const deleteSlot = await SlotModel.deleteMany({ service: result?._id });
-  console.log(deleteSlot, "delete all slot");
   return result;
 };
 

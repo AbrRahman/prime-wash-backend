@@ -1,7 +1,11 @@
+import status from "http-status";
+import AppError from "../../errors/appError";
 import generateServiceSlot from "../../utils/generateServiceSlot";
 import ServiceModel from "../service/service.model";
 import TSlot from "./slot.interface";
 import SlotModel from "./slot.model";
+import { date } from "zod";
+import filterSlot from "../../utils/filterSlot";
 
 const createSlotIntoDB = async (payload: Partial<TSlot>) => {
   const service = await ServiceModel.findById(payload?.service);
@@ -17,23 +21,35 @@ const createSlotIntoDB = async (payload: Partial<TSlot>) => {
 
   //   save into db
   const result = await SlotModel.create(slot);
-
+  if (!result?.length) {
+    throw new AppError(status.INTERNAL_SERVER_ERROR, "Slot create failed");
+  }
   return result;
 };
 
 // get all slot
 const getAllSlotFromDB = async (query: Record<string, unknown>) => {
+  let givenDate = "";
+  const today = new Date();
   let filterQuery: any = {};
   if (query.serviceId) {
     filterQuery.service = query.serviceId;
   }
   if (query.date) {
     filterQuery.date = query.date;
+    givenDate = new Date(query.date as string).toDateString();
   }
   const result = await SlotModel.find(filterQuery)
     .populate("service")
     .sort({ startTime: 1 });
-  return result;
+
+  //  filter by result today upper 10 minute
+
+  if (givenDate === today.toDateString() && result?.length) {
+    return await filterSlot(result);
+  } else {
+    return result;
+  }
 };
 
 // get single slot by slotId;
