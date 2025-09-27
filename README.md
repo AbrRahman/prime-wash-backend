@@ -10,6 +10,11 @@ Express js and Typescript booking platform api project
 - Validation: zod
 - File Uploads & Media: multer, cloudinary
 - Networking & Utilities: axios, dotenv, http-status
+# Project ERD Diagram
+
+<a href="https://res.cloudinary.com/dmhfrwdq3/image/upload/v1758995171/PrimeWash_ERD_m06wx2.png">
+  <img src="https://res.cloudinary.com/dmhfrwdq3/image/upload/v1758995171/PrimeWash_ERD_m06wx2.png" alt="ERD Diagram" width="600">
+</a>
 
 ## API documentation
 ### Bsae Url : `https://prime-wash-backend.vercel.app`
